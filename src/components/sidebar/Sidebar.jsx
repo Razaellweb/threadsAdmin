@@ -16,11 +16,35 @@ import {
 import { Link } from "react-router-dom";
 
 export default function Sidebar() {
-  var user = localStorage.getItem("user")
-  if (user && user == "threadsandtextiles") {
+  function getDataAndCheckExpiration(key, maxAgeInDays) {
+    const storedData = localStorage.getItem(key);
 
+    if (storedData) {
+      const dataWithTimestamp = JSON.parse(storedData);
+      const currentTime = new Date().getTime();
+      const storedTimestamp = dataWithTimestamp.timestamp;
+
+      // Calculate the difference in milliseconds
+      const timeDifference = currentTime - storedTimestamp;
+      const maxAgeInMilliseconds = maxAgeInDays * 24 * 60 * 60 * 1000;
+
+      if (timeDifference > maxAgeInMilliseconds) {
+        // Data has expired, remove it from localStorage
+        localStorage.removeItem(key);
+        return null;
+      }
+
+      return dataWithTimestamp.data;
+    }
+
+    return null;
+  }
+
+  const user = getDataAndCheckExpiration("users", 3);
+  
+  if (user && user == "threadsandtextile") {
   } else {
-   window.location = "/login"
+    window.location = "/login";
   }
   return (
     <div className="sidebar">

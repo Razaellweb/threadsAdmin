@@ -7,10 +7,19 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
 
+  function saveDataWithTimestamp(key, data) {
+    const timestamp = new Date().getTime();
+    const dataWithTimestamp = {
+      timestamp: timestamp,
+      data: data
+    };
+    localStorage.setItem(key, JSON.stringify(dataWithTimestamp));
+  }
+
   const handleClick = (e) => {
     e.preventDefault();
     if (username == "threadsandtextiles" && password == "obaloluwa28") {
-      localStorage.setItem("user", "threadsandtextiles")
+      saveDataWithTimestamp("users", "threadsandtextile")
       window.location = "/"
     } else if (username == "threadsandtextiles" && password !== "obaloluwa28") {
       alert("incorrect password")
