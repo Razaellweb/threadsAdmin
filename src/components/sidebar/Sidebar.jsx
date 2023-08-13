@@ -16,6 +16,12 @@ import {
 import { Link } from "react-router-dom";
 
 export default function Sidebar() {
+  var user = localStorage.getItem("user")
+  if (user && user == "threadsandtextiles") {
+
+  } else {
+   window.location = "/login"
+  }
   return (
     <div className="sidebar">
       <div className="sidebarWrapper">

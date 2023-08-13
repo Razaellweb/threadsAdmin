@@ -9,7 +9,16 @@ const Login = () => {
 
   const handleClick = (e) => {
     e.preventDefault();
-    login(dispatch, { username, password });
+    if (username == "threadsandtextiles" && password == "obaloluwa28") {
+      localStorage.setItem("user", "threadsandtextiles")
+      window.location = "/"
+    } else if (username == "threadsandtextiles" && password !== "obaloluwa28") {
+      alert("incorrect password")
+    }  else if (username !== "threadsandtextiles" && password == "obaloluwa28") {
+      alert("incorrect username")
+    } else {
+      alert("Incorrect credentials")
+    }
   };
 
   return (
@@ -22,6 +31,7 @@ const Login = () => {
         justifyContent: "center",
       }}
     >
+      <h1>Admin Login</h1>
       <input
         style={{ padding: 10, marginBottom: 20 }}
         type="text"
