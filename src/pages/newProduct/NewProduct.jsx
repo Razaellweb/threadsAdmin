@@ -95,6 +95,10 @@ export default function NewProduct() {
           const product = { ...inputs, img: downloadURL, categories: cat, color: colorArray, size: sizeArray };
           console.log(product);
           addProduct(product, dispatch);
+          alert("Please wait while product creates and wait for page refresh");
+          setTimeout(function() {
+            window.location = "/"
+          }, 10000);
         });
       }
     );

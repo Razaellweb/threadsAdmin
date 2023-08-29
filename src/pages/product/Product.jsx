@@ -11,6 +11,10 @@ export default function Product() {
   const location = useLocation();
   const productId = location.pathname.split("/")[2];
   const [pStats, setPStats] = useState([]);
+  const [title, setTitle] = useState("");
+  const [desc, setDesc] = useState("");
+  const [price, setPrice] = useState(0);
+
 
   const product = useSelector((state) =>
     state.product.products.find((product) => product._id === productId)
@@ -54,6 +58,39 @@ export default function Product() {
     getStats();
   }, [productId, MONTHS]);
 
+  async function updateProduct(e) {
+    e.preventDefault()
+
+    const url = `https://threadsandtextiles.adaptable.app/api/products/${product._id}`;
+    
+    const priceObject = {
+      price: `${price == 0 ? product.price : price}`,
+      desc: `${desc == "" ? product.desc : desc}`,
+      title: `${title == "" ? product.title : title}`
+    };
+
+    const options = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(priceObject),
+    };
+    
+    try {
+      const response = await fetch(url, options);
+      if (!response.ok) {
+        throw new Error(`Request failed with status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log("Product price updated:", data);
+      alert("product price updated")
+      window.location = "/"
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
+  }
+  
   return (
     <div className="product">
       <div className="productTitleContainer">
@@ -91,11 +128,11 @@ export default function Product() {
         <form className="productForm">
           <div className="productFormLeft">
             <label>Product Name</label>
-            <input type="text" placeholder={product.title} />
+            <input type="text" placeholder={product.title} onChange={(e) => {setTitle(e.target.value)}}/>
             <label>Product Description</label>
-            <input type="text" placeholder={product.desc} />
+            <input type="text" placeholder={product.desc} onChange={(e) => {setDesc(e.target.value)}}/>
             <label>Price</label>
-            <input type="text" placeholder={product.price} />
+            <input type="text" placeholder={product.price} onChange={(e) => {setPrice(e.target.value)}}/>
             <label>In Stock</label>
             <select name="inStock" id="idStock">
               <option value="true">Yes</option>
@@ -110,7 +147,7 @@ export default function Product() {
               </label>
               <input type="file" id="file" style={{ display: "none" }} />
             </div>
-            <button className="productButton">Update</button>
+            <button className="productButton" onClick={updateProduct}>Update</button>
           </div>
         </form>
       </div>
